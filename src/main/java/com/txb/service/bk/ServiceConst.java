@@ -6,6 +6,6 @@ package com.txb.service.bk;
  * @description :
  */
 public class ServiceConst {
-    public static final String Back_Package = "oracle-arm";
+    public static final String BackPackage = "oracle-arm";
 
 }
