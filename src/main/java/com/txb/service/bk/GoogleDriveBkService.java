@@ -9,7 +9,14 @@ import java.io.File;
  */
 public class GoogleDriveBkService {
 
+    public void doBk(){
+        System.out.println(1);
+
+    }
+
+
     private void cleanHistory(){
+
 
 
     }
