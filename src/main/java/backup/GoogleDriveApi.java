@@ -1,6 +1,7 @@
 package backup;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -80,14 +81,14 @@ public class GoogleDriveApi {
         return service.files().delete(fileId).execute();
     }
 
-    public File uploadFile(String parent,String fileName,String fileUrl) throws IOException {
+    public File uploadFile(String parent,String filePath) throws IOException {
         File fileMetadata = new File();
-        fileMetadata.setName(fileName);
+        fileMetadata.setName(FileNameUtil.getName(filePath));
 
         fileMetadata.setParents(CollectionUtil.newArrayList(parent));
 
-        java.io.File filePath = new java.io.File(fileUrl);
-        FileContent mediaContent = new FileContent(null, filePath);
+        java.io.File fileFile = new java.io.File(filePath);
+        FileContent mediaContent = new FileContent(null, fileFile);
 
         try {
             Drive.Files.Create create = service.files().create(fileMetadata, mediaContent);

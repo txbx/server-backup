@@ -19,12 +19,8 @@ public class CustomProgressListener implements MediaHttpUploaderProgressListener
                 break;
             case INITIATION_COMPLETE:
                 System.out.println("初始化完成!");
-                String location1 = uploader.getInitiationHeaders().getLocation();
-                System.out.println(location1);
                 break;
             case MEDIA_IN_PROGRESS:
-                String location = uploader.getInitiationHeaders().getLocation();
-                System.out.println(location);
                 System.out.println("上传进度："+uploader.getProgress());
                 System.out.println("已经上传大小（Bytes）："+uploader.getNumBytesUploaded());
                 break;

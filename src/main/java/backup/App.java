@@ -5,6 +5,8 @@ import cn.hutool.cron.task.Task;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author : txb
@@ -16,9 +18,10 @@ public class App {
         CronUtil.schedule("0 0 1 * * ?", (Task) () -> {
             System.out.println("开始备份");
             try {
-                GoogleDriveBackup service = new GoogleDriveBackup();
+                Backup service = new Backup();
                 service.doBackup();
-            } catch (GeneralSecurityException | IOException | InterruptedException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("备份失败："+e.getMessage());
             }
         });
