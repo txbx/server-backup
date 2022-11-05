@@ -1,4 +1,4 @@
-package com.txb.service.bk;
+package backup;
 
 import cn.hutool.cron.CronUtil;
 import cn.hutool.cron.task.Task;
@@ -16,9 +16,9 @@ public class App {
         CronUtil.schedule("0 0 1 * * ?", (Task) () -> {
             System.out.println("开始备份");
             try {
-                GoogleDriveBkService service = new GoogleDriveBkService();
-                service.doBk();
-            } catch (GeneralSecurityException | IOException e) {
+                GoogleDriveBackup service = new GoogleDriveBackup();
+                service.doBackup();
+            } catch (GeneralSecurityException | IOException | InterruptedException e) {
                 System.out.println("备份失败："+e.getMessage());
             }
         });

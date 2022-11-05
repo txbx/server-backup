@@ -28,5 +28,5 @@
 
 application-local.yml
 /src/test/**/LocalTest.java
-/src/main/java/com/txb/service/bk/Test.java
+/src/main/java/backup/Test.java
 /src/main/resources/static/
