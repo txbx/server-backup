@@ -3,10 +3,7 @@ package backup;
 import cn.hutool.cron.CronUtil;
 import cn.hutool.cron.task.Task;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import java.util.Map;
 
 /**
  * @author : txb
@@ -22,7 +19,7 @@ public class App {
                 service.doBackup();
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("备份失败："+e.getMessage());
+                System.out.println("备份失败：" + e.getMessage());
             }
         });
 

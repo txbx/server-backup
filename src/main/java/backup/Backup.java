@@ -41,8 +41,11 @@ public class Backup {
         Future<String> fileNameFuture = ThreadUtil.execAsync(() -> {
             System.out.println("打包文件...");
             java.io.File file = this.tarPackage();
+            System.out.println("打包完成");
             try {
+                System.out.println("压缩文件...");
                 this.gzipArcher(file);
+                System.out.println("压缩完成");
             } catch (FileNotFoundException e) {
                 System.out.println("压缩文件失败");
                 return null;
@@ -59,18 +62,11 @@ public class Backup {
 
     private String findBkPackageId() throws IOException {
         List<File> files = googleDriveApi.listFile("mimeType='application/vnd.google-apps.folder' and name='" + Const.ServerName + "'");
-        String id = null;
         for (File file : files) {
             if (Const.ServerName.equals(file.getName())) {
-                id = file.getId();
-                break;
+                return file.getId();
             }
         }
-
-        if (ObjectUtil.isNotEmpty(id)) {
-            return id;
-        }
-
         return googleDriveApi.creatFolder(Const.ServerName);
     }
 
@@ -83,23 +79,26 @@ public class Backup {
     private java.io.File tarPackage() {
         long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         String fileName = Const.ServerName + "-" + timestamp + ".tar";
-        String name = Const.BasePath +"/" + fileName;
+        String name = Const.TarFilePath +"/" + fileName;
         java.io.File file = new java.io.File(name);
 
         Archiver archiver = CompressUtil.createArchiver(CharsetUtil.CHARSET_UTF_8, ArchiveStreamFactory.TAR, file);
-        archiver.add(new java.io.File(Const.BasePath+"/"+Const.BackupPackage));
-        archiver.finish().close();
+        archiver.add(new java.io.File(Const.BackupPackage));
+        archiver.close();
         return file;
     }
 
+    // TODO:分块读取和写出
     private void gzipArcher(java.io.File file) throws FileNotFoundException {
-        byte[] gzip = ZipUtil.gzip(file);
+        System.out.println("文件大小："+file.length());
+        byte[] gzip = ZipUtil.gzip(FileUtil.getInputStream(file));
         IoUtil.write(new FileOutputStream(file.getAbsolutePath() + ".gz"), true, gzip);
     }
 
 
     private void uploadTar(String parent,String absolutePathPath) throws IOException {
+        System.out.println("上传文件......");
         googleDriveApi.uploadFile(parent,absolutePathPath);
-        System.out.println(1);
+        System.out.println("上传完成");
     }
 }
