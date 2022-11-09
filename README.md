@@ -11,7 +11,7 @@ curl -fsSL https://get.docker.com | sh
 
 2. 运行：
 ```shell
-docker run -d 
+docker run -d \
 -v /etc/localtime:/etc/localtime \
 -v 需要备份的文件或者目录:/home/server-backup \
 -v 谷歌云盘服务账号的密钥文件:/home/auth/auth.json \
