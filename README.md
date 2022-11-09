@@ -15,8 +15,8 @@ docker run -d \
 -v /etc/localtime:/etc/localtime \
 -v 需要备份的文件或者目录:/home/server-backup \
 -v 谷歌云盘服务账号的密钥文件:/home/auth/auth.json \
--e SERVER_NAME="保存在谷歌云盘上的文件夹"
--e PARENT="谷歌云盘服务账号所拥有操作权限的文件夹id"
+-e SERVER_NAME="保存在谷歌云盘上的文件夹" \
+-e PARENT="谷歌云盘服务账号所拥有操作权限的文件夹id" \
 --name backup \
 tanxiubiao/server-backup:0.1
 ```
