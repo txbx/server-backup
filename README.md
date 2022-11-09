@@ -32,6 +32,8 @@ docker run -d \
 -v /home/txb/docker_data:/home/server-backup \  # /home/txb/docker_data 是我需要备份的目录
 -v /home/txb/tcp.sh:/home/server-backup/tcp.sh \  # /home/txb/docker_data 是我需要备份的文件，多个文件或者目录像这样添加就行
 -v /home/txb/docker_data/docker-file/server-bk/stoked-bivouac-367509-cbaff8577527.json:/home/auth/auth.json \ # /home/txb/docker_data/docker-file/server-bk/stoked-bivouac-367509-cbaff8577527.json 是我谷歌云盘服务账号的密钥文件
+-e PARENT="1tnwC9TV8ZdbnGxaswqwyTwuBjVdFJVz4" \ # 是我账号拥有操作权限的的文件夹id
+-e SERVER_NAME="oracle-arm" \ # 备份文件将上传到的文件夹，如果云盘上不存在会自动创建。这个文件夹是 PARENT 文件夹的子目录
 --name backup \
 tanxiubiao/server-backup:0.1
 ```
