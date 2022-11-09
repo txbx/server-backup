@@ -93,7 +93,7 @@ public class GoogleDriveApi {
         try {
             Drive.Files.Create create = service.files().create(fileMetadata, mediaContent);
             MediaHttpUploader mediaHttpUploader = create.getMediaHttpUploader();
-            mediaHttpUploader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
+            mediaHttpUploader.setChunkSize(MediaHttpUploader.DEFAULT_CHUNK_SIZE);
             mediaHttpUploader.setProgressListener(new CustomProgressListener());
             File file = create.execute();
             System.out.println("文件 ID: " + file.getId());

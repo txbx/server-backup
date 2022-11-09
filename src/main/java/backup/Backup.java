@@ -22,6 +22,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * @author : txb
@@ -88,11 +89,22 @@ public class Backup {
         return file;
     }
 
-    // TODO:分块读取和写出
     private void gzipArcher(java.io.File file) throws FileNotFoundException {
-        System.out.println("文件大小："+file.length());
-        byte[] gzip = ZipUtil.gzip(FileUtil.getInputStream(file));
-        IoUtil.write(new FileOutputStream(file.getAbsolutePath() + ".gz"), true, gzip);
+        try {
+            BufferedInputStream in = FileUtil.getInputStream(file);
+            FileOutputStream out = new FileOutputStream(file.getAbsolutePath() + ".gz");
+            GZIPOutputStream gzip = new GZIPOutputStream(out);
+            byte[] buffer = new byte[8192];
+            int n = 0;
+            while((n = in.read(buffer, 0, buffer.length)) > 0){
+                gzip.write(buffer, 0, n);
+            }
+            gzip.close();
+            in.close();
+            out.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
