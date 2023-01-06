@@ -51,7 +51,7 @@ public class Backup {
         });
 
         String packageId = this.findBkPackageId();
-        this.cleanHistory(packageId);
+//        this.cleanHistory(packageId);
 
         String fileName = fileNameFuture.get(30, TimeUnit.MINUTES);
         this.uploadTar(packageId, fileName);
