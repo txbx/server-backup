@@ -68,10 +68,12 @@ public class GoogleDriveApi {
         }
     }
 
-    public List<File> listFile(String q) throws IOException {
+    public List<File> listFile(String... q) throws IOException {
         Drive.Files.List list = service.files().list();
         if(ObjectUtil.isNotEmpty(q)){
-            list.setQ(q);
+            for (String s : q) {
+                list.setQ(s);
+            }
         }
         FileList result = list.execute();
         return  result.getFiles();

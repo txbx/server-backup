@@ -51,7 +51,7 @@ public class Backup {
         });
 
         String packageId = this.findBkPackageId();
-//        this.cleanHistory(packageId);
+        this.cleanHistory(packageId);
 
         String fileName = fileNameFuture.get(30, TimeUnit.MINUTES);
         this.uploadTar(packageId, fileName);
@@ -76,7 +76,8 @@ public class Backup {
         long saveDayInt = Long.parseLong(saveDay);
         Long delTime = nowTimestamp - 86400L * saveDayInt;
 
-        List<File> files = googleDriveApi.listFile(Const.ServerName);
+        String q = "'" + packageId + "' in parents";
+        List<File> files = googleDriveApi.listFile(q);
         for (File file : files) {
             String name = file.getName();
             // 截断文件名，判断是不是备份文件
