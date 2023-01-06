@@ -76,7 +76,7 @@ public class Backup {
         long saveDayInt = Long.parseLong(saveDay);
         Long delTime = nowTimestamp - 86400L * saveDayInt;
 
-        List<File> files = googleDriveApi.listFile(packageId);
+        List<File> files = googleDriveApi.listFile(Const.ServerName);
         for (File file : files) {
             String name = file.getName();
             // 截断文件名，判断是不是备份文件
