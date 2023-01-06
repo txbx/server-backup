@@ -1,12 +1,8 @@
 package backup;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ZipUtil;
 import cn.hutool.extra.compress.CompressUtil;
 import cn.hutool.extra.compress.archiver.Archiver;
 import com.google.api.services.drive.model.File;
@@ -58,7 +54,7 @@ public class Backup {
         this.cleanHistory(packageId);
 
         String fileName = fileNameFuture.get(30, TimeUnit.MINUTES);
-        this.uploadTar(packageId,fileName);
+        this.uploadTar(packageId, fileName);
     }
 
     private String findBkPackageId() throws IOException {
@@ -72,17 +68,30 @@ public class Backup {
     }
 
 
-    private void cleanHistory(String packageId) {
+    private void cleanHistory(String packageId) throws IOException {
+        // 取默认配置，删除历史文件
+        // 取所有文件 根据日期取3天前的文件集合。判断3天前的文件集合和当前的文件集合size是否一样，一样则保留一份最新的文件
+        long nowTimestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        String saveDay = Const.SaveDay;
+        long saveDayInt = Long.parseLong(saveDay);
+        Long delTime = nowTimestamp - 86400L * saveDayInt;
 
+        List<File> files = googleDriveApi.listFile(packageId);
+        for (File file : files) {
+            String name = file.getName();
+            // 截断文件名，判断是不是备份文件
+            System.out.println(name);
 
+        }
     }
 
     private java.io.File tarPackage() {
         long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         String fileName = Const.ServerName + "-" + timestamp + ".tar";
-        String name = Const.TarFilePath +"/" + fileName;
+        String name = Const.TarFilePath + "/" + fileName;
         java.io.File file = new java.io.File(name);
 
+        // 文件如果在打包的同时文件被更新了，会出现这个异常 IOException: Request to write '5510' bytes exceeds size in header of '180360043' bytes for entry 'server-backup/mysql/data/binlog.000010'
         Archiver archiver = CompressUtil.createArchiver(CharsetUtil.CHARSET_UTF_8, ArchiveStreamFactory.TAR, file);
         archiver.add(new java.io.File(Const.BackupPackage));
         archiver.close();
@@ -96,7 +105,7 @@ public class Backup {
             GZIPOutputStream gzip = new GZIPOutputStream(out);
             byte[] buffer = new byte[8192];
             int n = 0;
-            while((n = in.read(buffer, 0, buffer.length)) > 0){
+            while ((n = in.read(buffer, 0, buffer.length)) > 0) {
                 gzip.write(buffer, 0, n);
             }
             gzip.close();
@@ -108,9 +117,9 @@ public class Backup {
     }
 
 
-    private void uploadTar(String parent,String absolutePathPath) throws IOException {
+    private void uploadTar(String parent, String absolutePathPath) throws IOException {
         System.out.println("上传文件......");
-        googleDriveApi.uploadFile(parent,absolutePathPath);
+        googleDriveApi.uploadFile(parent, absolutePathPath);
         System.out.println("上传完成");
     }
 }
