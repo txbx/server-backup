@@ -1,0 +1,15 @@
+stages:
+  - run
+
+运行:
+  stage: run
+  allow_failure: false
+  only:
+    - main
+  tags:
+    - txb
+  script:
+    - mvn clean package -Dmaven.test.skip=true
+    - docker build -t $CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA .
+    - if [ $(docker ps -aq --filter name=$CI_PROJECT_NAME) ]; then docker rm -f $CI_PROJECT_NAME;fi
+    - docker run -d -v /etc/localtime:/etc/localtime -v /home/txb/docker_data:/home/server-backup -v /home/txb/docker_data/docker-file/server-bk/stoked-bivouac-367509-cbaff8577527.json:/home/auth/auth.json --ip 172.18.0.88 --name $CI_PROJECT_NAME $CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
