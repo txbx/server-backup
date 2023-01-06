@@ -1,4 +1,4 @@
-FROM tanxiubiao/jdk8:0.1
+FROM tanxiubiao/maven:0.2
 COPY /target/backup-0.0.1.jar /app/app.jar
 ENV TZ=Asia/Shanghai
 ENV SERVER_NAME="oracle-arm"
