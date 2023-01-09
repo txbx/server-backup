@@ -90,17 +90,17 @@ public class Backup {
 
             // 前缀
             String prefix = name.substring(0,Const.ServerName.length());
-            if(Const.ServerName.equals(prefix)){
+            System.out.println("前缀："+prefix);
+            if(!Const.ServerName.equals(prefix)){
                 System.out.println("不是备份文件："+name);
-                System.out.println("前缀："+prefix);
                 continue;
             }
 
             // 后缀
             String suffix = name.substring(name.length() - 8);
-            if(".tar.gz".equals(suffix)){
+            System.out.println("后缀："+suffix);
+            if(!".tar.gz".equals(suffix)){
                 System.out.println("不是备份文件："+name);
-                System.out.println("后缀："+suffix);
                 continue;
             }
 
