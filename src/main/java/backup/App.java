@@ -5,6 +5,7 @@ import cn.hutool.cron.task.Task;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -31,7 +32,7 @@ public class App {
         // 1.以GBK编码方式获取str的字节数组，再用String有参构造函数构造字符串
         System.out.println(new String(str.getBytes("GBK")));
         // 2.以UTF-8编码方式获取str的字节数组，再以默认编码构造字符串
-        System.out.println(new String(str.getBytes("UTF-8")));
+        System.out.println(new String(str.getBytes(StandardCharsets.UTF_8)));
 
 
         // 启动就执行一次
