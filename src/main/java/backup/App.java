@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class App {
     public static void main(String[] args) {
+        System.setProperty("user.language","zh");
         Map<String, String> getenv = System.getenv();
         System.out.println("环境变量:" + getenv);
 
