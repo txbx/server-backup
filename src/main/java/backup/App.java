@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public class App {
     public static void main(String[] args) throws UnsupportedEncodingException {
-        System.setProperty("user.language","zh");
         Map<String, String> getenv = System.getenv();
         System.out.println("环境变量:" + getenv);
 
