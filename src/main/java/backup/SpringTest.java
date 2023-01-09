@@ -2,16 +2,22 @@ package backup;
 
 import cn.hutool.cron.CronUtil;
 import cn.hutool.cron.task.Task;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Map;
 
 /**
  * @author : txb
- * @date: 2022/11/4 17:23
+ * @date: 2023/1/9 10:41
  * @description :
  */
-public class App {
+@SpringBootApplication
+public class SpringTest {
     public static void main(String[] args) {
+        System.out.println("springboot 启动");
+        SpringApplication.run(SpringTest.class, args);
+
         Map<String, String> getenv = System.getenv();
         System.out.println("环境变量:" + getenv);
 
@@ -24,7 +30,7 @@ public class App {
         CronUtil.start();
     }
 
-    static void doBackUp(){
+    private static void doBackUp(){
         System.out.println("开始备份");
         try {
             Backup service = new Backup();
