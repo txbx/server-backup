@@ -15,7 +15,7 @@ import java.util.Map;
 @SpringBootApplication
 public class SpringTest {
     public static void main(String[] args) {
-        System.out.println("springboot 启动");
+        System.out.println("springboot 启动。。。");
         SpringApplication.run(SpringTest.class, args);
 
         Map<String, String> getenv = System.getenv();
