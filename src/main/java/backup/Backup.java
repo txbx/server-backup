@@ -80,8 +80,33 @@ public class Backup {
         List<File> files = googleDriveApi.listFile(q);
         for (File file : files) {
             String name = file.getName();
+            int fileNameLength = name.length();
             // 截断文件名，判断是不是备份文件
-            System.out.println(name);
+            int limitLength = Const.ServerName.length() + 7;
+            if (fileNameLength <= limitLength) {
+                System.out.println("不是备份文件："+name);
+                continue;
+            }
+
+            // 前缀
+            String prefix = name.substring(0,Const.ServerName.length());
+            if(Const.ServerName.equals(prefix)){
+                System.out.println("不是备份文件："+name);
+                System.out.println("前缀："+prefix);
+                continue;
+            }
+
+            // 后缀
+            String suffix = name.substring(name.length() - 8);
+            if(".tar.gz".equals(suffix)){
+                System.out.println("不是备份文件："+name);
+                System.out.println("后缀："+suffix);
+                continue;
+            }
+
+            // 时间戳
+            String fileTimestamp = name.substring(Const.ServerName.length() - 1, Const.ServerName.length() + 9);
+            System.out.println("时间戳:"+fileTimestamp);
 
         }
     }

@@ -14,25 +14,9 @@ import java.util.Map;
  * @description :
  */
 public class App {
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) {
         Map<String, String> getenv = System.getenv();
         System.out.println("环境变量:" + getenv);
-
-        System.out.println("属性："+System.getProperties());
-        //获取系统默认编码
-        System.out.println("系统默认编码：" + System.getProperty("file.encoding")); //查询结果GBK
-        //系统默认字符编码
-        System.out.println("系统默认字符编码：" + Charset.defaultCharset()); //查询结果GBK
-        //操作系统用户使用的语言
-        System.out.println("系统默认语言：" + System.getProperty("user.language")); //查询结果zh
-
-        // 使用String的有参构造方法
-        String str = new String("hhhh ty编码更合适是asdasd");
-        // 1.以GBK编码方式获取str的字节数组，再用String有参构造函数构造字符串
-        System.out.println(new String(str.getBytes("GBK")));
-        // 2.以UTF-8编码方式获取str的字节数组，再以默认编码构造字符串
-        System.out.println(new String(str.getBytes(StandardCharsets.UTF_8)));
-
 
         // 启动就执行一次
         doBackUp();
