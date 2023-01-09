@@ -3,6 +3,7 @@ package backup;
 import cn.hutool.cron.CronUtil;
 import cn.hutool.cron.task.Task;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  * @description :
  */
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         System.setProperty("user.language","zh");
         Map<String, String> getenv = System.getenv();
         System.out.println("环境变量:" + getenv);
@@ -24,6 +25,13 @@ public class App {
         System.out.println("系统默认字符编码：" + Charset.defaultCharset()); //查询结果GBK
         //操作系统用户使用的语言
         System.out.println("系统默认语言：" + System.getProperty("user.language")); //查询结果zh
+
+        // 使用String的有参构造方法
+        String str = new String("hhhh ty编码更合适是asdasd");
+        // 1.以GBK编码方式获取str的字节数组，再用String有参构造函数构造字符串
+        System.out.println(new String(str.getBytes("GBK")));
+        // 2.以UTF-8编码方式获取str的字节数组，再以默认编码构造字符串
+        System.out.println(new String(str.getBytes("UTF-8")));
 
 
         // 启动就执行一次
