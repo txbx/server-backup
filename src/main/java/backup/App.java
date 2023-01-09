@@ -12,11 +12,13 @@ import java.util.Map;
  */
 public class App {
     public static void main(String[] args) {
+        System.setProperty("sun.jnu.encoding","GBK");
+
         Map<String, String> getenv = System.getenv();
         System.out.println("环境变量:" + getenv);
 
         System.out.println("属性："+System.getProperties());
-        System.setProperty("sun.jnu.encoding","GBK");
+
 
         // 启动就执行一次
         doBackUp();
