@@ -35,6 +35,9 @@ public class App {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("备份失败：" + e.getMessage());
+        } finally {
+            System.out.println("gc清理");
+            System.gc();
         }
     }
 }
