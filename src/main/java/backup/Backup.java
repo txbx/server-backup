@@ -109,7 +109,7 @@ public class Backup {
             }
 
             // 时间戳
-            String fileTimestamp = name.substring(Const.ServerName.length() + 1, Const.ServerName.length() + 10);
+            String fileTimestamp = name.substring(Const.ServerName.length() + 1, Const.ServerName.length() + 9);
             System.out.println("时间戳:" + fileTimestamp);
             long fileTimestampL;
             try {
