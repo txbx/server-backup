@@ -3,6 +3,7 @@ package backup;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.compress.CompressUtil;
 import cn.hutool.extra.compress.archiver.Archiver;
 import com.google.api.services.drive.model.File;
@@ -15,9 +16,10 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -78,36 +80,74 @@ public class Backup {
 
         String q = "'" + packageId + "' in parents";
         List<File> files = googleDriveApi.listFile(q);
+        List<Map<String, Object>> delFileList = new ArrayList<>();
+        List<String> bkFileIds = new ArrayList<>();
         for (File file : files) {
             String name = file.getName();
             int fileNameLength = name.length();
             // 截断文件名，判断是不是备份文件
             int limitLength = Const.ServerName.length() + 7;
             if (fileNameLength <= limitLength) {
-                System.out.println("不是备份文件："+name);
+                System.out.println("不是备份文件：" + name);
                 continue;
             }
 
             // 前缀
-            String prefix = name.substring(0,Const.ServerName.length());
-            System.out.println("前缀："+prefix);
-            if(!Const.ServerName.equals(prefix)){
-                System.out.println("不是备份文件："+name);
+            String prefix = name.substring(0, Const.ServerName.length());
+            System.out.println("前缀：" + prefix);
+            if (!Const.ServerName.equals(prefix)) {
+                System.out.println("不是备份文件：" + name);
                 continue;
             }
 
             // 后缀
-            String suffix = name.substring(name.length() - 8);
-            System.out.println("后缀："+suffix);
-            if(!".tar.gz".equals(suffix)){
-                System.out.println("不是备份文件："+name);
+            String suffix = name.substring(name.length() - 7);
+            System.out.println("后缀：" + suffix);
+            if (!".tar.gz".equals(suffix)) {
+                System.out.println("不是备份文件：" + name);
                 continue;
             }
 
             // 时间戳
             String fileTimestamp = name.substring(Const.ServerName.length() - 1, Const.ServerName.length() + 9);
-            System.out.println("时间戳:"+fileTimestamp);
+            System.out.println("时间戳:" + fileTimestamp);
+            long fileTimestampL;
+            try {
+                fileTimestampL = Long.parseLong(fileTimestamp);
+            } catch (NumberFormatException e) {
+                System.out.println("不是备份文件：" + name);
+                continue;
+            }
 
+            bkFileIds.add(file.getId());
+
+            if (fileTimestampL <= delTime) {
+                System.out.println("删除过期备份文件：" + name);
+                Map<String, Object> delMap = new HashMap<>();
+                delMap.put("timestamp", fileTimestampL);
+                delMap.put("fileId", file.getId());
+                delMap.put("name", name);
+                delFileList.add(delMap);
+            }
+
+        }
+
+        if (delFileList.size() == bkFileIds.size()) {
+            List<Map<String, Object>> delFileListSorted = delFileList.stream().sorted((o1, o2) -> {
+                Long o1Timestamp = (Long) o1.get("timestamp");
+                Long o2Timestamp = (Long) o2.get("timestamp");
+                return o1Timestamp.compareTo(o2Timestamp);
+            }).collect(Collectors.toList());
+
+            if (ObjectUtil.isNotEmpty(delFileListSorted)) {
+                delFileListSorted.remove(delFileList.size() - 1);
+            }
+        }
+
+        for (Map<String, Object> delFileMap : delFileList) {
+            String fileId = (String) delFileMap.get("fileId");
+            System.out.println("删除历史文件："+delFileMap.get("name"));
+            googleDriveApi.deleteFile(fileId);
         }
     }
 
