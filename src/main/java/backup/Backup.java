@@ -109,7 +109,7 @@ public class Backup {
             }
 
             // 时间戳
-            String fileTimestamp = name.substring(Const.ServerName.length(), Const.ServerName.length() + 8);
+            String fileTimestamp = name.substring(Const.ServerName.length() + 1, Const.ServerName.length() + 10);
             System.out.println("时间戳:" + fileTimestamp);
             long fileTimestampL;
             try {
@@ -122,7 +122,6 @@ public class Backup {
             bkFileIds.add(file.getId());
 
             if (fileTimestampL <= delTime) {
-                System.out.println("删除过期备份文件：" + name);
                 Map<String, Object> delMap = new HashMap<>();
                 delMap.put("timestamp", fileTimestampL);
                 delMap.put("fileId", file.getId());
@@ -146,7 +145,7 @@ public class Backup {
 
         for (Map<String, Object> delFileMap : delFileList) {
             String fileId = (String) delFileMap.get("fileId");
-            System.out.println("删除历史文件："+delFileMap.get("name"));
+            System.out.println("删除过期备份文件："+delFileMap.get("name"));
             googleDriveApi.deleteFile(fileId);
         }
     }
