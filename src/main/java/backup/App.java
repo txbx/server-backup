@@ -19,7 +19,7 @@ public class App {
         System.out.println("环境变量:" + getenv);
 
         // 启动就执行一次
-//        doBackUp();
+        doBackUp();
 
         // 定时任务
         CronUtil.schedule("0 0 1 * * ?", (Task) App::doBackUp);
