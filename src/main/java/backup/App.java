@@ -19,12 +19,12 @@ public class App {
         System.out.println("环境变量:" + getenv);
 
         // 启动就执行一次
-        doBackUp();
+//        doBackUp();
 
         // 定时任务
-        CronUtil.schedule("0 0 1 * * ?", (Task) App::doBackUp);
-        CronUtil.setMatchSecond(true);
-        CronUtil.start();
+//        CronUtil.schedule("0 0 1 * * ?", (Task) App::doBackUp);
+//        CronUtil.setMatchSecond(true);
+//        CronUtil.start();
     }
 
     static void doBackUp(){
@@ -38,6 +38,7 @@ public class App {
         } finally {
             System.out.println("gc清理");
             System.gc();
+            System.out.println("gc清理完成");
         }
     }
 }
