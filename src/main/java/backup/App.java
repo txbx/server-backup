@@ -23,7 +23,6 @@ public class App {
 
         // 定时任务
         CronUtil.schedule("0 0 1 * * ?", (Task) App::doBackUp);
-        CronUtil.setMatchSecond(true);
         CronUtil.start();
     }
 
@@ -31,7 +30,7 @@ public class App {
         System.out.println("开始备份");
         try {
             Backup service = new Backup();
-//            service.doBackup();
+            service.doBackup();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("备份失败：" + e.getMessage());
