@@ -22,9 +22,13 @@ public class App {
 //        doBackUp();
 
         // 定时任务
-//        CronUtil.schedule("0 0 1 * * ?", (Task) App::doBackUp);
-//        CronUtil.setMatchSecond(true);
-//        CronUtil.start();
+        CronUtil.schedule("0 0 1 * * ?", (Task) App::test);
+        CronUtil.setMatchSecond(true);
+        CronUtil.start();
+    }
+
+    static void test(){
+
     }
 
     static void doBackUp(){
