@@ -62,9 +62,9 @@ public class Backup {
     }
 
     private void cleanLocalHistory(String fileName) {
-        System.out.println("删除本地文件...");
+        System.out.println("删除本地文件:" + fileName);
         FileUtil.del(fileName);
-        FileUtil.del(fileName + ".gz");
+        FileUtil.del(fileName.substring(0, fileName.length() - 3));
     }
 
     private String findBkPackageId() throws IOException {
@@ -153,7 +153,7 @@ public class Backup {
 
         for (Map<String, Object> delFileMap : delFileList) {
             String fileId = (String) delFileMap.get("fileId");
-            System.out.println("删除过期备份文件："+delFileMap.get("name"));
+            System.out.println("删除过期备份文件：" + delFileMap.get("name"));
             googleDriveApi.deleteFile(fileId);
         }
     }
