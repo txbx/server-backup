@@ -53,10 +53,18 @@ public class Backup {
         });
 
         String packageId = this.findBkPackageId();
-        this.cleanHistory(packageId);
+        this.cleanCloudHistory(packageId);
 
         String fileName = fileNameFuture.get(30, TimeUnit.MINUTES);
         this.uploadTar(packageId, fileName);
+
+        this.cleanLocalHistory(fileName);
+    }
+
+    private void cleanLocalHistory(String fileName) {
+        System.out.println("删除本地文件...");
+        FileUtil.del(fileName);
+        FileUtil.del(fileName + ".gz");
     }
 
     private String findBkPackageId() throws IOException {
@@ -70,7 +78,7 @@ public class Backup {
     }
 
 
-    private void cleanHistory(String packageId) throws IOException {
+    private void cleanCloudHistory(String packageId) throws IOException {
         // 取默认配置，删除历史文件
         // 取所有文件 根据日期取3天前的文件集合。判断3天前的文件集合和当前的文件集合size是否一样，一样则保留一份最新的文件
         long nowTimestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
