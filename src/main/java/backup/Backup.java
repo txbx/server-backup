@@ -147,7 +147,7 @@ public class Backup {
             }).collect(Collectors.toList());
 
             if (ObjectUtil.isNotEmpty(delFileListSorted)) {
-                delFileListSorted.remove(delFileList.size() - 1);
+                delFileList.remove(delFileListSorted.get(delFileList.size() - 1));
             }
         }
 
